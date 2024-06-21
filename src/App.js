@@ -1,25 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import Form from "./Form";
+import Quizapp from "./Quizapp";
+import Result from "./Result";
+import Nav from "./Nav";
+import {
+  Navigate,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+} from "react-router-dom";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Nav />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Form />}></Route>
+          <Route path="/Quizapp" element={<PrivateRoute ><Quizapp/></PrivateRoute>}></Route>
+          <Route path="/Result" element={<PrivateRoute ><Result/></PrivateRoute>}></Route>
+        </Routes>
+      </Router>
     </div>
   );
 }
+
+const PrivateRoute = (props) => {
+  const isAuth = () => {
+    let name = localStorage.getItem("Name");
+    let email = localStorage.getItem("E-mail");
+    console.log("in Auth ==>", name, email);
+    if (name && email) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  return isAuth() ?<> {props.children}</> : <Navigate to="/"></Navigate>;
+};
+
+
 
 export default App;
